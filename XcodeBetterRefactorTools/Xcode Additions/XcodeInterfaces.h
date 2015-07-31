@@ -29,9 +29,40 @@
     andRunDestination:(XC(RunDestination))destination;
 @end
 
+@protocol XCP(IDESchemeBuildableReference)
+
+@end
+
+@protocol XCP(IDEBuildSchemeAction)
+- (id)buildActionEntries;
+- (NSArray *)buildableReferences;
+@end
+
+@protocol XCP(IDEScheme)
+- (XC(IDEBuildSchemeAction))buildSchemeAction;
+@end
+
+#pragma mark - Workspaces and editor areas
+
+@protocol XCP(PBXTargetBuildContext)
+- (id)effectiveLibrarySearchPathsWithMacroExpansionScope:(id)scope;
+- (id)effectiveFrameworkSearchPaths;
+- (id)effectiveUserHeaderSearchPaths;
+- (id)effectiveHeaderSearchPaths;
+@end
+
+@protocol XCP(Xcode3Target)
+- (id)primaryBuildable;
+- (id)buildables;
+- (id)buildableProducts;
+- (id)indexableFiles;
+- (id)allBuildFileReferences;
+@end
+
 @protocol XCP(Workspace)
 - (XC(RunContextManager))runContextManager;
 - (XC(DVTFilePath))representingFilePath;
+- (id)referencedBlueprints;
 @end
 
 @protocol XCP(IDEWorkspace);
