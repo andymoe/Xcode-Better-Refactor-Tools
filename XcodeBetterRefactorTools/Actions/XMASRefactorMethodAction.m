@@ -58,8 +58,10 @@ NSString * const noMethodSelected = @"No method selected. Put your cursor inside
         // inspecting build context, trying to find -I and -F flags
         countOfMethods = 0;
         id context = [target valueForKey:@"targetBuildContext"];
-        Class contextClass = [context class];
-        Method *methods = class_copyMethodList(contextClass, &countOfMethods);
+
+        NSLog(@"================> inspecting method of XCMacroExpansionScope");
+        Class scopeClass = NSClassFromString(@"XCMacroExpansionScope");
+        Method *methods = class_copyMethodList(scopeClass, &countOfMethods);
         for (NSUInteger index = 0; index < countOfMethods; ++index) {
             NSLog(@"================> %s", sel_getName(method_getName(methods[index])));
         }
