@@ -44,12 +44,8 @@ NSString * const noMethodSelected = @"No method selected. Put your cursor inside
 
     for (id target in [workspace referencedBlueprints]) {
         unsigned int countOfMethods = 0;
-//        Class targetClass = [target class];
-//        Method *methods = class_copyMethodList(targetClass, &countOfMethods);
-//        for (NSUInteger index = 0; index < countOfMethods; ++index) {
-//            NSLog(@"================> %s", sel_getName(method_getName(methods[index])));
-//        }
 
+        // HERE BE THINGS WE NEED //
         // actual target
         NSLog(@"================> %@", target);
         // references to the filepaths that are its translation units (Xcode3FileReference)
@@ -59,12 +55,16 @@ NSString * const noMethodSelected = @"No method selected. Put your cursor inside
         countOfMethods = 0;
         id context = [target valueForKey:@"targetBuildContext"];
 
-        NSLog(@"================> inspecting method of XCMacroExpansionScope");
-        Class scopeClass = NSClassFromString(@"XCMacroExpansionScope");
-        Method *methods = class_copyMethodList(scopeClass, &countOfMethods);
-        for (NSUInteger index = 0; index < countOfMethods; ++index) {
-            NSLog(@"================> %s", sel_getName(method_getName(methods[index])));
-        }
+//        NSLog(@"================> inspecting methods of target build context");
+//        Class contextClass = [context class];
+//        Method *methods = class_copyMethodList(contextClass, &countOfMethods);
+//        for (NSUInteger index = 0; index < countOfMethods; ++index) {
+//            NSLog(@"================> %s", sel_getName(method_getName(methods[index])));
+//        }
+
+        NSLog(@"================> context has a target ?? %@", [context valueForKey:@"target"]);
+
+        // TODO :: check if this PBXNativeTarget responds to the @selector(cachedPropertyInfoContextForConfigurationNamed:)
 
         id badScope = [[NSClassFromString(@"XCMacroExpansionScope") alloc] init];
         NSLog(@"================> effective lib search paths %lu", [[context effectiveLibrarySearchPathsWithMacroExpansionScope:badScope] count]);
