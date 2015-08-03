@@ -44,11 +44,24 @@
 
 #pragma mark - Workspaces and editor areas
 
+@protocol XCP(XCMacroExpansionScope)
+- (instancetype)initWithParentScope:(id)something
+               macroDefinitionTable:(id)something
+                    definitionLevel:(NSInteger)defLevel
+            definitionLevelsToClear:(NSInteger)defLevelsToClear
+           conditionParameterValues:(id)something
+                   expansionOptions:(id)something;
+@end
+
 @protocol XCP(PBXTargetBuildContext)
 - (id)effectiveLibrarySearchPathsWithMacroExpansionScope:(id)scope;
-- (id)effectiveFrameworkSearchPaths;
-- (id)effectiveUserHeaderSearchPaths;
-- (id)effectiveHeaderSearchPaths;
+- (id)effectiveFrameworkSearchPathsWithMacroExpansionScope:(id)scope;
+- (id)effectiveUserHeaderSearchPathsWithMacroExpansionScope:(id)scope;
+- (id)effectiveHeaderSearchPathsWithMacroExpansionScope:(id)scope;
+@end
+
+@protocol XCP(PBXNativeTarget)
+- (id)cachedPropertyInfoContextForConfigurationNamed:(NSString *)name;
 @end
 
 @protocol XCP(Xcode3Target)

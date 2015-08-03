@@ -64,17 +64,30 @@ NSString * const noMethodSelected = @"No method selected. Put your cursor inside
 
         NSLog(@"================> context has a target ?? %@", [context valueForKey:@"target"]);
 
-        // TODO :: check if this PBXNativeTarget responds to the @selector(cachedPropertyInfoContextForConfigurationNamed:)
+        // TODO :: try to find the framework / header search paths / user header search paths
 
-        id badScope = [[NSClassFromString(@"XCMacroExpansionScope") alloc] init];
-        NSLog(@"================> effective lib search paths %lu", [[context effectiveLibrarySearchPathsWithMacroExpansionScope:badScope] count]);
+        id nativeTarget = [context valueForKey:@"target"];
+        id debugInfoContext = [nativeTarget cachedPropertyInfoContextForConfigurationNamed:@"debug"];
+        NSLog(@"================> native target cached property context : %@", debugInfoContext);
 
-//        NSLog(@"================> %@", [context effectiveLibrarySearchPaths]);
-//        NSLog(@"================> %@", [context effectiveFrameworkSearchPaths]);
-//        NSLog(@"================> %@", [context effectiveUserHeaderSearchPaths]);
-//        NSLog(@"================> %@", [context effectiveHeaderSearchPaths]);
+//        // this is just the NSSet of all possible keys, it seems
+//        id propertyDictionaries = [debugInfoContext valueForKey:@"allPropertyNamesInAllDictionaries"];
+//        NSLog(@"================> property dictionaries : %@", propertyDictionaries);
 
+//        NSLog(@"================> inspecting methods of macro expansion scope");
+//        Class klass = NSClassFromString(@"XCMacroExpansionScope");
+//        Method *methods = class_copyMethodList(klass, &countOfMethods);
+//        for (NSUInteger index = 0; index < countOfMethods; ++index) {
+//            NSLog(@"================> %s", sel_getName(method_getName(methods[index])));
+//        }
+//        break;
 
+//        id badScope = [[NSClassFromString(@"XCMacroExpansionScope") alloc] init];
+        id badScope = [[NSClassFromString(@"XCMacroExpansionScope") alloc] initWithParentScope:nil macroDefinitionTable:nil definitionLevel:10 definitionLevelsToClear:0 conditionParameterValues:nil expansionOptions:nil];;
+        NSLog(@"================> effective framework search paths %lu", [[context effectiveFrameworkSearchPathsWithMacroExpansionScope:badScope] count]);
+        NSLog(@"================> effective user header search paths %lu", [[context effectiveUserHeaderSearchPathsWithMacroExpansionScope:badScope] count]);
+        NSLog(@"================> effective header search paths %lu", [[context effectiveHeaderSearchPathsWithMacroExpansionScope:badScope] count]);
+        NSLog(@"================> effective library search paths %lu", [[context effectiveLibrarySearchPathsWithMacroExpansionScope:badScope] count]);
 
 //        id primaryBuildable = [target primaryBuildable];
 //
@@ -88,7 +101,7 @@ NSString * const noMethodSelected = @"No method selected. Put your cursor inside
 //        NSLog(@"================> %@", [target buildableProducts]);
 //        NSLog(@"================> %@", [target indexableFiles]);
 
-        break;
+//        break;
     }
 
 //    XC(RunContextManager) runContextManager = [workspace runContextManager];
