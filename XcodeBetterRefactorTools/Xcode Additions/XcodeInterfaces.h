@@ -53,7 +53,7 @@
                    expansionOptions:(id)something;
 @end
 
-@protocol XCP(PBXTargetBuildContext)
+@protocol XCP(PBXTargetBuildContext) <NSObject>
 - (id)effectiveLibrarySearchPathsWithMacroExpansionScope:(id)scope;
 - (id)effectiveFrameworkSearchPathsWithMacroExpansionScope:(id)scope;
 - (id)effectiveUserHeaderSearchPathsWithMacroExpansionScope:(id)scope;

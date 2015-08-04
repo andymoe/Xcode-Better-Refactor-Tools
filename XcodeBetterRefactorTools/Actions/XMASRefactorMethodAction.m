@@ -8,6 +8,7 @@
 #import "XMASChangeMethodSignatureControllerProvider.h"
 #import "XMASXcode.h"
 #import <objc/runtime.h>
+#import "XMASXcodeTargetSearchPathResolver.h"
 
 NSString * const noMethodSelected = @"No method selected. Put your cursor inside of a method declaration";
 
@@ -42,18 +43,29 @@ NSString * const noMethodSelected = @"No method selected. Put your cursor inside
 - (void)hackyGetClangArgsForBuildables {
     XC(Workspace) workspace = [XMASXcode currentWorkspace];
 
+    XMASXcodeTargetSearchPathResolver *searchPathResolver = [[XMASXcodeTargetSearchPathResolver alloc] init];
+
     for (id target in [workspace referencedBlueprints]) {
         unsigned int countOfMethods = 0;
 
+        if ([[target description] containsString:@"Cedar"]) {
+            NSLog(@"================> cowardly skipping cedar target %@", target);
+            continue;
+        }
+
         // HERE BE THINGS WE NEED //
-        // actual target
+        // actual target that gets built by Xcode
         NSLog(@"================> %@", target);
         // references to the filepaths that are its translation units (Xcode3FileReference)
-        NSLog(@"================> %@", [target allBuildFileReferences]);
+//        NSLog(@"================> %@", [target allBuildFileReferences]);
+
+        // maybe this will give us the header search paths ???
+        NSLog(@"================> %@", [searchPathResolver effectiveHeaderSearchPathsForTarget:target]);
 
         // inspecting build context, trying to find -I and -F flags
         countOfMethods = 0;
         id context = [target valueForKey:@"targetBuildContext"];
+        NSLog(@"================> target's build context %@", context);
 
 //        NSLog(@"================> inspecting methods of target build context");
 //        Class contextClass = [context class];
